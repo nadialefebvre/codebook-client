@@ -26,13 +26,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const onFormatClick = () => {
     // get current value from editor
     const unformattedCode = editorRef.current.getModel().getValue()
-    // format value
-    const formattedCode = prettier.format(unformattedCode, {
-      parser: "babel",
-      plugins: [parser],
-      semi: false,
-      singleQuote: false,
-    })
+    // format value (and replace white line added at the end with empty string)
+    const formattedCode = prettier
+      .format(unformattedCode, {
+        parser: "babel",
+        plugins: [parser],
+        semi: false,
+        singleQuote: false,
+      })
+      .replace(/\n$/, "")
     // set formatted value back in editor
     editorRef.current.setValue(formattedCode)
   }
