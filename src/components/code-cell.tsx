@@ -21,7 +21,27 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
 
     const orderedCells = order.map((id) => data[id])
 
-    const cumulativeCode = []
+    const cumulativeCode = [
+      `
+        import _React from "react"
+        import _ReactDOM from "react-dom"
+
+        const show = (value) => {
+
+          const root = document.querySelector("#root")
+
+          if (typeof value === "object") {
+            if (value.$$typeof && value.props) {
+              _ReactDOM.render(value, root)
+            } else {
+              root.innerHTML = JSON.stringify(value)
+            }
+          } else {
+            root.innerHTML = value
+          }
+        }
+      `,
+    ]
     for (let c of orderedCells) {
       if (c.type === "code") {
         cumulativeCode.push(c.content)
@@ -32,8 +52,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     }
     return cumulativeCode
   })
-
-  console.log(cumulativeCode)
 
   useEffect(() => {
     if (!bundle) {
